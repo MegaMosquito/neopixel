@@ -21,6 +21,19 @@ test:
 	sleep 1
 	curl -X POST -sS localhost:7777/neopixel/v1/0/0/0/0
 
+zooba:
+	curl -X POST -sS localhost:7777/neopixel/v1/init/18/1
+	while [ 1 ]; \
+	do \
+	  curl -X POST -sS localhost:7777/neopixel/v1/0/255/0/0; \
+	  sleep 1; \
+	  curl -X POST -sS localhost:7777/neopixel/v1/0/0/255/0; \
+	  sleep 1; \
+	  curl -X POST -sS localhost:7777/neopixel/v1/0/0/0/255; \
+	  sleep 1; \
+	done
+	curl -X POST -sS localhost:7777/neopixel/v1/0/0/0/0
+
 exec:
 	docker exec -it neopixel_server /bin/sh
 
