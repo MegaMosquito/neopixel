@@ -1,7 +1,11 @@
 all: build run
 
+ARCH:=$(shell sh -c "uname -m")
+ARMV6L:=$(filter armv6l,$(ARCH))
+DOCKERFILE:=$(if $(ARMV6L),Dockerfile.armv6l,Dockerfile)
+
 build:
-	docker build -t ibmosquito/neopixel_server:1.0.0 .
+	docker build -t ibmosquito/neopixel_server:1.0.0 -f "${DOCKERFILE}" .
 
 dev: build stop
 	-docker rm -f neopixel_server 2> /dev/null || :
@@ -46,4 +50,4 @@ stop:
 clean: stop
 	-docker rmi ibmosquito/neopixel_server:1.0.0 2>/dev/null || :
 
-.PHONY: all build dev run test exec stop clean
+.PHONY: all build dev run test exec push stop clean
