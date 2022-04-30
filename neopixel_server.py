@@ -12,6 +12,7 @@
 #
 
 from flask import Flask
+from flask import send_file
 import json
 import subprocess
 import threading
@@ -124,6 +125,34 @@ def neopixel_post(pixel, r, g, b):
     bi = int(b)
     neopixels[n] = (ri, gi, bi)
     return ('{"success": {"neopixel": %d, "red": %d, "green": %d, "blue": %d}}\n' % (n, ri, gi, bi))
+
+
+# POST: all/<r>/<g>/<b> where r, g, and b are in 0..255
+@webapp.route("/neopixel/v1/all/<r>/<g>/<b>", methods=['POST'])
+def neopixel_all_post(r, g, b):
+  if None == neopixels:
+    return ('{"error": "NeoPixels have not been initialized!"}\n')
+  elif not valid_rgb(r, g, b):
+    return ('{"error": "Neopixel color (%s,%s,%s) is not valid."}\n' % (r, g, b))
+  else:
+    ri = int(r)
+    gi = int(g)
+    bi = int(b)
+    for i in range(len(neopixels)):
+      neopixels[i] = (ri, gi, bi)
+    return ('{"success": {"neopixels": "(all)", "red": %d, "green": %d, "blue": %d}}\n' % (ri, gi, bi))
+
+
+# GET: Home Page
+@webapp.route("/", methods=['GET'])
+def index():
+  return send_file('/index.html')
+
+
+# GET: favicon
+@webapp.route('/favicon.ico', methods=['GET'])
+def send_favicon():
+  return send_file('/favicon.ico')
 
 
 # Main program (to start the web server thread)

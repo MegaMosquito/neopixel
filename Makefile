@@ -13,7 +13,7 @@ dev: build stop
 
 run: stop
 	-docker rm -f speedtest 2>/dev/null || :
-	docker run -d --privileged --name neopixel_server -p 7777:7777 ibmosquito/neopixel_server:1.0.0
+	docker run -d --privileged --restart unless-stopped --name neopixel_server -p 7777:7777 ibmosquito/neopixel_server:1.0.0
 
 test:
 	curl -X POST -sS localhost:7777/neopixel/v1/init/18/1

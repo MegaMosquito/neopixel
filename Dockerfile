@@ -8,6 +8,8 @@ RUN pip3 install RPi.GPIO rpi_ws281x adafruit-circuitpython-neopixel Flask
 
 # Copy over the source
 COPY neopixel_server.py /
+COPY index.html /
+COPY favicon.ico /
 WORKDIR /
 
 # Run the daemon

@@ -1,0 +1,69 @@
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>NeoPixel Controller</title>
+  </head>
+
+  <body style="background-color:#FFFFFF; font-family:verdana;">
+
+    <script>
+
+      var is_on = false
+      var xhttpr = new XMLHttpRequest()
+      xhttpr.open('POST', "/neopixel/v1/init/21/24")
+      xhttpr.setRequestHeader('Content-Type', 'text/html; charset=utf-8')
+      xhttpr.addEventListener('load', initializing)
+      xhttpr.addEventListener('error', () => console.log('NeoPixels failed to initialize.'))
+      xhttpr.send()
+
+      function initializing() {
+        document.getElementById("status").innerHTML = "NeoPixels still initializing.";
+        xhttpr = new XMLHttpRequest()
+        xhttpr.open('POST', "/neopixel/v1/all/0/0/0")
+        xhttpr.setRequestHeader('Content-Type', 'text/html; charset=utf-8')
+        xhttpr.addEventListener('load', initialized)
+        xhttpr.addEventListener('error', () => console.log('NeoPixels failed to turn off.'))
+        xhttpr.send()
+      }
+
+      function initialized() {
+        document.getElementById("status").innerHTML = "NeoPixels off.";
+      }
+
+      function toggle() {
+        is_on = !is_on;
+        xhttpr = new XMLHttpRequest()
+        if ( is_on ) {
+          document.getElementById("status").innerHTML = "NeoPixels turning on.";
+          xhttpr.open('POST', "/neopixel/v1/all/255/255/255")
+        } else {
+          document.getElementById("status").innerHTML = "NeoPixels turning off.";
+          xhttpr.open('POST', "/neopixel/v1/all/0/0/0")
+        }
+        xhttpr.setRequestHeader('Content-Type', 'text/html; charset=utf-8')
+        xhttpr.addEventListener('load', toggle_complete)
+        xhttpr.addEventListener('error', () => console.log('NeoPixels failed to toggle.'))
+        xhttpr.send()
+      }
+
+      function toggle_complete() {
+        if ( is_on ) {
+          document.getElementById("status").innerHTML = "NeoPixels on.";
+        } else {
+          document.getElementById("status").innerHTML = "NeoPixels off.";
+        }
+      }
+
+    </script>
+
+    <p> </p>
+    <p id="status">NeoPixels are initializing.</p>
+
+    <p> </p>
+    <button onclick="toggle()">Toggle Light</button>
+
+  </body>
+
+</html>
+
