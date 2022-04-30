@@ -12,7 +12,6 @@ dev: build stop
 	docker run -it --privileged --name neopixel_server -p 7777:7777 --volume `pwd`:/outside ibmosquito/neopixel_server:1.0.0 /bin/bash
 
 run: stop
-	-docker rm -f speedtest 2>/dev/null || :
 	docker run -d --privileged --restart unless-stopped --name neopixel_server -p 7777:7777 ibmosquito/neopixel_server:1.0.0
 
 test:
