@@ -8,7 +8,6 @@ build:
 	docker build -t ibmosquito/neopixel_server:1.0.0 -f "${DOCKERFILE}" .
 
 dev: build stop
-	-docker rm -f neopixel_server 2> /dev/null || :
 	docker run -it --privileged --name neopixel_server -p 7777:7777 --volume `pwd`:/outside ibmosquito/neopixel_server:1.0.0 /bin/bash
 
 run: stop
